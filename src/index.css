@@ -2,41 +2,78 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Surrealist Digital Gallery Design System */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
+    /* Core gallery colors - dark surrealist palette */
+    --background: 0 0% 2%;
+    --foreground: 0 0% 95%;
+    
+    --surface: 0 0% 8%;
+    --surface-elevated: 0 0% 12%;
+    --surface-glass: 0 0% 6%;
+    
+    /* Gallery accent colors */
+    --coral: 0 79% 70%;
+    --coral-muted: 0 79% 60%;
+    --gold: 51 76% 52%;
+    --gold-muted: 51 56% 42%;
+    --deep-purple: 300 48% 20%;
+    --deep-purple-muted: 300 38% 30%;
+    
+    /* Semantic tokens */
+    --primary: var(--coral);
+    --primary-foreground: 0 0% 2%;
+    --primary-muted: var(--coral-muted);
+    
+    --secondary: var(--gold);
+    --secondary-foreground: 0 0% 2%;
+    --secondary-muted: var(--gold-muted);
+    
+    --accent: var(--deep-purple);
+    --accent-foreground: 0 0% 95%;
+    --accent-muted: var(--deep-purple-muted);
+    
+    --card: var(--surface-elevated);
+    --card-foreground: 0 0% 95%;
+    --card-border: 0 0% 20%;
+    
+    --muted: 0 0% 25%;
+    --muted-foreground: 0 0% 65%;
+    
+    --border: 0 0% 20%;
+    --input: var(--surface-elevated);
+    --ring: var(--coral);
+    
+    /* Gallery-specific design tokens */
+    --glass-bg: hsla(0, 0%, 6%, 0.8);
+    --glass-border: hsla(0, 0%, 30%, 0.2);
+    --glow-primary: hsla(0, 79%, 70%, 0.3);
+    --glow-secondary: hsla(51, 76%, 52%, 0.2);
+    --shadow-artwork: 0 20px 40px hsla(0, 0%, 0%, 0.6);
+    --shadow-glow: 0 0 30px var(--glow-primary);
+    
+    /* Gradients */
+    --gradient-hero: linear-gradient(135deg, hsl(0, 0%, 2%) 0%, hsl(300, 48%, 8%) 50%, hsl(0, 0%, 2%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0, 0%, 12%) 0%, hsl(0, 0%, 8%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(0, 79%, 70%) 0%, hsl(51, 76%, 52%) 100%);
+    --gradient-glass: linear-gradient(145deg, hsla(0, 0%, 15%, 0.1) 0%, hsla(0, 0%, 5%, 0.1) 100%);
+    
+    /* Typography */
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+    
+    /* Animation timings */
+    --animation-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --animation-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --duration-fast: 0.2s;
+    --duration-normal: 0.3s;
+    --duration-slow: 0.5s;
+    
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +137,127 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-body);
+    background: var(--gradient-hero);
+    min-height: 100vh;
   }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+  }
+}
+
+@layer components {
+  /* Glass morphism effect */
+  .glass {
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+  }
+  
+  /* Artwork hover effects */
+  .artwork-card {
+    transition: all var(--duration-normal) var(--animation-smooth);
+    transform: translateY(0px);
+  }
+  
+  .artwork-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-artwork), var(--shadow-glow);
+  }
+  
+  /* Glitch effect */
+  .glitch {
+    position: relative;
+    animation: glitch 2s infinite;
+  }
+  
+  .glitch::before,
+  .glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.8;
+  }
+  
+  .glitch::before {
+    color: hsl(var(--coral));
+    animation: glitch-1 0.3s infinite linear alternate-reverse;
+  }
+  
+  .glitch::after {
+    color: hsl(var(--gold));
+    animation: glitch-2 0.3s infinite linear alternate-reverse;
+  }
+  
+  /* Smooth reveal animations */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    animation: reveal var(--duration-slow) var(--animation-smooth) forwards;
+  }
+  
+  .reveal-delay-1 { animation-delay: 0.1s; }
+  .reveal-delay-2 { animation-delay: 0.2s; }
+  .reveal-delay-3 { animation-delay: 0.3s; }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: var(--gradient-accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .glow-primary {
+    box-shadow: 0 0 20px var(--glow-primary);
+  }
+  
+  .glow-secondary {
+    box-shadow: 0 0 20px var(--glow-secondary);
+  }
+}
+
+@keyframes glitch {
+  0% { transform: translate(0); }
+  20% { transform: translate(-2px, 2px); }
+  40% { transform: translate(-2px, -2px); }
+  60% { transform: translate(2px, 2px); }
+  80% { transform: translate(2px, -2px); }
+  100% { transform: translate(0); }
+}
+
+@keyframes glitch-1 {
+  0% { clip-path: inset(40% 0 61% 0); }
+  20% { clip-path: inset(92% 0 1% 0); }
+  40% { clip-path: inset(43% 0 1% 0); }
+  60% { clip-path: inset(25% 0 58% 0); }
+  80% { clip-path: inset(54% 0 7% 0); }
+  100% { clip-path: inset(58% 0 43% 0); }
+}
+
+@keyframes glitch-2 {
+  0% { clip-path: inset(25% 0 58% 0); }
+  20% { clip-path: inset(54% 0 7% 0); }
+  40% { clip-path: inset(58% 0 43% 0); }
+  60% { clip-path: inset(40% 0 61% 0); }
+  80% { clip-path: inset(92% 0 1% 0); }
+  100% { clip-path: inset(43% 0 1% 0); }
+}
+
+@keyframes reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
 }
